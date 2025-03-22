@@ -25,9 +25,9 @@ for idx, img_path in enumerate(img_paths):
         person_labels.append(person_name)
 
 print("[STATUS] Saving face encodings...")
-face_data = {"encodings": encoded_faces, "names": person_labels}
+face_data = {"trained": encoded_faces, "names": person_labels}
 
-with open("encodings.pickle", "wb") as file:
+with open("trained.pickle", "wb") as file:
     pickle.dump(face_data, file)
 
-print("[SUCCESS] Face encoding process complete! Data saved in 'encodings.pickle'.")
+print("[SUCCESS] Face encoding process complete! Data saved in 'trained.pickle'.")
