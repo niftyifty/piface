@@ -2,7 +2,7 @@
 
 
 ## **System Overview**
-PiFace brings security to your doorstep by using facial recognition to recognise faces and physically open doors. Furthermore, Piface is able to do way more such as be viewed from our app, and save pictures of faces recognised for if needed for Law Enforcement later.
+PiFace plans to bring security to every doorstep by using AI to facially recognise people and physically open a door. It can be controlled via an app, save recognised faces and keeps privacy and accessibility at the forefront of its design for disabled and able-bodied users alike.
 
 
 ---
