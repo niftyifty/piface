@@ -9,33 +9,21 @@ import RPi.GPIO as GPIO
 from gpiozero import LED
 from picamera2 import Picamera2
 from email.message import EmailMessage
-from time import sleep
-from gtts import gTTS
+from time import sleep 
 
-print('Imports completed')
+print('Imports imported')
 
-GPIO.cleanup()
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(11, GPIO.OUT)
 
 from_email_addr = "piface36@gmail.com"
 from_email_pass = "lfmo kpvt glho cvpk"
-to_email_addrs = ["21chaudharil@bluecoatstudent.org.uk", "21zhengt@bluecoatstudent.org.uk", "iftekharsyed@proton.me"]
-
-def log_message(message):
-    with open("activity_log.txt", "a") as log_file:
-        log_file.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - {message}\n")
-
-def speak(text):
-    tts = gTTS(text=text, lang='en')
-    filename = "voice.mp3"
-    tts.save(filename)
-    os.system(f"mpg321 {filename}")
+to_email_addr = "21chaudharil@bluecoatstudent.org.uk"
 
 def send_email(body, image_path):
     msg = EmailMessage()
     msg['From'] = from_email_addr
-    msg['To'] = ", ".join(to_email_addrs)
+    msg['To'] = to_email_addr
     msg['Subject'] = 'Face Detected!'
     
     msg.set_content(body)
@@ -49,10 +37,10 @@ def send_email(body, image_path):
         server.login(from_email_addr, from_email_pass)
         server.send_message(msg)
         print('Email sent.')
-
+    
 print("Loading Encodings...")
 with open("encodings.pickle", "rb") as f:
-    data = pickle.loads(f.read())
+    data = pickle.load(f)
 
 known_face_encodings = data["encodings"]
 known_face_names = data["names"]
@@ -71,29 +59,17 @@ face_encodings = []
 face_names = []
 
 rf_transmitter = LED(18)
+BUTTON_PIN = 4
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def doorbell():
-    GPIO.cleanup()
-    GPIO.setmode(GPIO.BCM)
-    BUTTON_PIN = 4
-    GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    
-    if GPIO.input(BUTTON_PIN) == GPIO.HIGH:
+    if GPIO.input(BUTTON_PIN) == GPIO.LOW:
         print("Button pressed.")
         print("Sending signal...")
-        
         rf_transmitter.on()
         sleep(5)
         rf_transmitter.off()
-        sleep(0.5)
         print('Signal sent.')
-
-def motion_detected(frame, prev_frame, threshold=30):
-    diff = cv2.absdiff(frame, prev_frame)
-    gray_diff = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
-    _, thresh_diff = cv2.threshold(gray_diff, 25, 255, cv2.THRESH_BINARY)
-    motion_count = np.sum(thresh_diff > 0)
-    return motion_count > threshold
 
 def process_frame(frame):
     global face_locations, face_encodings, face_names
@@ -111,24 +87,20 @@ def process_frame(frame):
         
         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
         best_match_index = np.argmin(face_distances)
-        
-        if matches[best_match_index] and face_distances[best_match_index] < 0.6:  # confidence threshold
+        if matches[best_match_index]:
             name = known_face_names[best_match_index]
+            
             GPIO.setup(11, GPIO.OUT)
             p = GPIO.PWM(11, 50)
-            p.start(0)
-            p.ChangeDutyCycle(3)
+            p.start(7.5)  # Move servo to 90 degrees
+            sleep(2)
+            p.ChangeDutyCycle(2.5)  # Move servo back to 0 degrees
             sleep(1)
-            p.ChangeDutyCycle(12)
-            sleep(1)
+            p.stop()
             
-            body = f'The correct face has been detected as {name}.'
-            log_message(body)
-            speak(body)
+            body = 'The correct face has been detected.'
         else:
             body = 'The incorrect face has been detected.'
-            log_message(body)
-            speak(body)
         
         face_names.append(name)
         
@@ -156,17 +128,13 @@ def draw_results(frame):
 print('Loop begun')
 
 try:
-    prev_frame = picam2.capture_array()
     while True:
         frame = picam2.capture_array()
+        processed_frame = process_frame(frame)
+        display_frame = draw_results(processed_frame)
         
-        if motion_detected(frame, prev_frame):
-            processed_frame = process_frame(frame)
-            display_frame = draw_results(processed_frame)
-            doorbell()
-            cv2.imshow('Video', display_frame)
-            
-        prev_frame = frame
+        doorbell()
+        cv2.imshow('Video', display_frame)
         
         if cv2.waitKey(1) == ord("q"):
             break
