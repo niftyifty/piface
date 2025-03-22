@@ -73,8 +73,9 @@ PiFace plans to bring security to every doorstep by using AI to facially recogni
 
 - Transfer at minimum 100 photos to the "photos" folder.
 - Run the `training.py` script and wait for it to finish training the AI. A file named `trained.pickle` will be created.
-- Finally, Run the `face-rc.py` script to run the code! 
-- Enjoy :) 
+- To setup email, replace the `from_email_addr`, `to_email_addr` and `from_email_pass` with their corresponding credentials.
+- On the receiver, install the same dependencies [albeit opencv and face-recognition related libs] and run `receiver.py`.
+- You're done! Congratulations, and enjoy PiFace.
 
 
 
