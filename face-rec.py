@@ -16,9 +16,9 @@ print('Imports imported')
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(11, GPIO.OUT)
 
-from_email_addr = "piface36@gmail.com"
-from_email_pass = "lfmo kpvt glho cvpk"
-to_email_addr = "21chaudharil@bluecoatstudent.org.uk"
+from_email_addr = "sender@example.com"
+from_email_pass = "Google app password here" #16 letter password, eg. ekfn cnej fejv vrgs
+to_email_addr = "recipient@example.com"
 
 def send_email(body, image_path):
     msg = EmailMessage()
@@ -39,7 +39,7 @@ def send_email(body, image_path):
         print('Email sent.')
     
 print("Loading Encodings...")
-with open("encodings.pickle", "rb") as f:
+with open("training.pickle", "rb") as f:
     data = pickle.load(f)
 
 known_face_encodings = data["encodings"]
