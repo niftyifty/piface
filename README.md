@@ -1,8 +1,12 @@
 # PiFace: The Raspberry PA-Pi Competition 2024/5
 
 
-## **System Overview**
-PiFace plans to bring security to every doorstep by using AI to facially recognise people and physically open a door. It can be controlled via an app, save recognised faces and keeps privacy and accessibility at the forefront of its design for disabled and able-bodied users alike.
+## **Summary**
+PiFace plans to bring security to every doorstep. It uses AI and facial recognition to identify people to open your main door, via a tiny servo. It can be controlled and monitored via an app, save recognised faces and keeps privacy and accessibility at the forefront of its design for disabled and able-bodied users alike.
+We care about your data and convenience - the AI is trained to work while disconnected from WiFi using OpenCV, and all AI data is stored on-device forever.
+In addition, the cost of PiFace is minimal, simply being below £75 - less than the cost of a Ring doorbell.
+Of course, PiFace uses a RF Receiver and Transceiver operating on 433.92MHz as a normal doorbell to quickly notify residents of the house.
+And we're just getting started. We plan to add more modules, such as a feature allowing you to authorise friends and family to open the door. We even plan to add a mic/speaker combo to allow you to talk to visitors. Stay tuned!
 
 
 ---
