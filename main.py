@@ -32,9 +32,9 @@ GPIO.setup(11, GPIO.OUT)                       # Servo
 GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Pushbutton
  
 # --- Email Setup ---
-from_email_addr = "piface36@gmail.com"
-from_email_pass = "lfmo kpvt glho cvpk"
-to_email_addr = "Ukaizi2009@gmail.com"
+from_email_addr = "add it here"
+from_email_pass = "fkfk skdfk skdfj"
+to_email_addr = "add here"
  
 def send_email(body, image_path):
     msg = EmailMessage()
